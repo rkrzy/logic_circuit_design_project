@@ -6,6 +6,8 @@ module pupu(clk, keypad, RESET, mole, SEG_COM, SEG_DATA,pz, LCD_E,LCD_RS,LCD_RW,
 	output [7:0]mole;
 	output [7:0] SEG_COM;
 	output [6:0] SEG_DATA;
+	output [6:0] SEG7_COMBO;
+
 	output pz;
 	
 	wire [3:0] notenum;
@@ -21,6 +23,7 @@ module pupu(clk, keypad, RESET, mole, SEG_COM, SEG_DATA,pz, LCD_E,LCD_RS,LCD_RW,
 	reg [7:0]mole;
 	reg [7:0] timer = 45;
 	reg [7:0] score = 0;
+	reg [3:0] Combo = 0;
 	reg [3:0]i=0;
 	reg check;
 	reg [7:0] keypad_temp;
@@ -44,7 +47,7 @@ module pupu(clk, keypad, RESET, mole, SEG_COM, SEG_DATA,pz, LCD_E,LCD_RS,LCD_RW,
 	HB_FULL_LED(RESETN,PIC_DRIVER,R,G,B);
 	
 	
-
+	SevenSeg_One combo(combo, SEG7_COMBO);
 	
 	
 	notes notegen(RESET, clr, clk, notenum, len, run);
@@ -127,21 +130,29 @@ else
 begin
 	
 if((mole[0] & keypad_temp[0]) == 1'b1) begin
-    score[7:0] <= score[7:0]+1'b1; end
+    score[7:0] <= score[7:0]+1'b1;
+	combo = combo + 1; end
     else if((mole[1] & keypad_temp[1]) == 1'b1) begin
-    score[7:0] <= score[7:0]+1'b1; end
+    score[7:0] <= score[7:0]+1'b1;
+	combo = combo + 1; end
     else if((mole[2] & keypad_temp[2]) == 1'b1) begin
-    score[7:0] <= score[7:0]+1'b1; end
+    score[7:0] <= score[7:0]+1'b1;
+	combo = combo + 1; end
     else if((mole[3] & keypad_temp[3]) == 1'b1) begin
-    score[7:0] <= score[7:0]+1'b1; end
+    score[7:0] <= score[7:0]+1'b1;
+	combo = combo + 1; end
     else if((mole[4] & keypad_temp[4]) == 1'b1) begin
-    score[7:0] <= score[7:0]+1'b1; end
+    score[7:0] <= score[7:0]+1'b1; 
+	combo = combo + 1;end
     else if((mole[5] & keypad_temp[5]) == 1'b1) begin
-    score[7:0] <= score[7:0]+1'b1; end
+    score[7:0] <= score[7:0]+1'b1;
+	combo = combo + 1; end
     else if((mole[6] & keypad_temp[6]) == 1'b1) begin
-    score[7:0] <= score[7:0]+1'b1; end
+    score[7:0] <= score[7:0]+1'b1;
+	combo = combo + 1; end
     else if((mole[7] & keypad_temp[7]) == 1'b1) begin
-    score[7:0] <= score[7:0]+1'b1; end
+    score[7:0] <= score[7:0]+1'b1; 
+	combo = combo + 1;end
     else begin end
     
 score_trigger = 1;
@@ -161,14 +172,9 @@ begin
     8'b00100000 : begin keypad_temp = 8'b00100000; end
     8'b01000000 : begin keypad_temp = 8'b01000000; end
     8'b10000000 : begin keypad_temp = 8'b10000000; end
+	default : begin keypad_temp = keypad_temp; end
     endcase
-if(score_trigger == 1)
-begin
-	score_trigger = 0;
-	 keypad_temp = 8'b00000001;
 end
 
-end
-			
 			
 endmodule
