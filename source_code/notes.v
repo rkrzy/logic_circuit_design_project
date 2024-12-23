@@ -1,153 +1,136 @@
-module notes(load, next, clk, note, length, run);
-	input load, next, clk;
-	output [3:0] note;
-	output [1:0] length;
-	output run;
-	reg [7:0] notenum;
-	reg [3:0] note;
-	reg [1:0] length;
-	reg run;
-	
-	always@(posedge clk)
-	begin
-		if(load)
-			run <= 1'b1;
+module notes(load, next, clk, note, length, run, finish);
+    input load, next, clk, finish;
+    output [3:0] note;
+    output [1:0] length;
+    output run;
+    reg [7:0] notenum;
+    reg [3:0] note;
+    reg [1:0] length;
+    reg run;
 
-		if(next)
-			if(notenum < 64)
-				notenum <= notenum + 1;
-			else
-			begin
-				run <= 1;
-				notenum <= 0;
-			end
+    always @(posedge clk) begin
+        if (load) 
+            run <= 1'b1;
 
-		if(run)
-		begin
-			if(notenum == 0)
-				notenum <= notenum + 1;
+        if (finish == 1) begin
+            notenum <= 56;
+            end
+            
+        if (next && finish == 0 ) begin
+            if (notenum < 56)
+                notenum <= notenum + 1;
+            else begin
+                notenum <= 0; // 반복을 위해 notenum 초기화
+            end
+        end
+        
 
-			case(notenum)
-			1: note <= 5;
-			2: note <= 0;
+        if (run) begin
 
-			3: note <= 5;
-			4: note <= 0;
+            case (notenum)
+                0: note <= 4'b0001; // 도
+                1: note <= 4'b0010; // 레
+                2: note <= 4'b0100; // 미
+                3: note <= 4'b0101; // 파
+                4: note <= 4'b0110; // 솔
+                5: note <= 4'b1000; // 라
+                6: note <= 4'b0111; // 시
+                7: note <= 4'b0000; // Rest
 
-			5: note <= 6;
-			6: note <= 0;
+                // 첫 번째 구절
+                8: note <= 4'b0001; // 도
+                9: note <= 4'b1000; // 라
+                10: note <= 4'b0110; // 솔
+                11: note <= 4'b0101; // 파
+                12: note <= 4'b0001; // 도
+                13: note <= 4'b0110; // 솔
+                14: note <= 4'b0101; // 파
+                15: note <= 4'b0010; // 레
 
-			7: note <= 6;
-			8: note <= 0;
+                // 두 번째 구절
+                16: note <= 4'b0100; // 미
+                17: note <= 4'b0011; // 시
+                18: note <= 4'b0110; // 솔
+                19: note <= 4'b0001; // 도
+                20: note <= 4'b0001; // 도
+                21: note <= 4'b0001; // 도
+                22: note <= 4'b0001; // 도
+                23: note <= 4'b0010; // 레
 
-			9: note <= 5;
-			10: note <= 0;
+                // 세 번째 구절
+                24: note <= 4'b0100; // 미
+                25: note <= 4'b0100; // 미
+                26: note <= 4'b0100; // 미
+                27: note <= 4'b0100; // 미
+                28: note <= 4'b0100; // 미
+                29: note <= 4'b0000; // Rest
+                30: note <= 4'b0110; // 솔
+                31: note <= 4'b0101; // 파
 
-			11: note <= 5;
-			12: note <= 0;
+                // 네 번째 구절
+                32: note <= 4'b0001; // 도
+                33: note <= 4'b0010; // 레
+                34: note <= 4'b0110; // 솔
+                35: note <= 4'b0101; // 파
+                36: note <= 4'b0001; // 도
+                37: note <= 4'b0110; // 솔
+                38: note <= 4'b0000; // Rest
+                39: note <= 4'b0000; // Rest
 
-			13: note <= 4;
-			14: note <= 4;
-			15: note <= 4;
-			16: note <= 0;
+                // 반복 구절
+                40: note <= 4'b0100; // 미
+                41: note <= 4'b0110; // 솔
+                42: note <= 4'b0110; // 솔
+                43: note <= 4'b0110; // 솔
+                44: note <= 4'b0110; // 솔
+                45: note <= 4'b0000; // Rest
+                46: note <= 4'b0110; // 솔
+                47: note <= 4'b0101; // 파
 
-			17: note <= 5;
-			18: note <= 0;
+                // 마지막 구절
+                48: note <= 4'b0110; // 솔
+                49: note <= 4'b0101; // 파
+                50: note <= 4'b0001; // 도
+                51: note <= 4'b0010; // 레
+                52: note <= 4'b0110; // 솔
+                53: note <= 4'b0101; // 파
+                54: note <= 4'b0000; // Rest
+                55: note <= 4'b0000; // Rest
 
-			19: note <= 5;
-			20: note <= 0;
+                default: note <= 4'b0000; // Rest
+            endcase
+            
+            // 길이 설정: 각 음표에 대한 길이 조정
+            case (notenum)
+                0: length <= 2; 
+                1: length <= 2;
+                2: length <= 2;
+                3: length <= 2;
+                4: length <= 2;
+                5: length <= 2;
+                6: length <= 2;
+                7: length <= 1; // Rest
+                8: length <= 2; 
+                9: length <= 2; 
+                10: length <= 2; 
+                11: length <= 2; 
+                12: length <= 2; 
+                13: length <= 2; 
+                14: length <= 2; 
+                15: length <= 1; // Rest
 
-			21: note <= 4;
-			22: note <= 0;
+                // 각 구절에 맞는 길이 설정
+                16: length <= 2; 
+                17: length <= 2;
+                18: length <= 2;
+                19: length <= 2;
+                20: length <= 2;
+                21: length <= 2;
+                22: length <= 2; 
+                23: length <= 1; // Rest
 
-			23: note <= 4;
-			24: note <= 0;
-
-			25: note <= 2;
-			26: note <= 2;
-			27: note <= 2;
-			28: note <= 2;
-			29: note <= 2;
-			30: note <= 0;
-
-			31: note <= 0;
-			32: note <= 0;
-
-			33: note <= 5;
-			34: note <= 0;
-
-			35: note <= 5;
-			36: note <= 0;
-
-			37: note <= 6;
-			38: note <= 0;
-
-			39: note <= 6;
-			40: note <= 0;
-
-			41: note <= 5;
-			42: note <= 0;
-
-			43: note <= 5;
-			44: note <= 0;
-
-			45: note <= 4;
-			46: note <= 4;
-			47: note <= 4;
-			48: note <= 0;
-
-			49: note <= 5;
-			50: note <= 0;
-
-			51: note <= 3;
-			52: note <= 0;
-
-			53: note <= 2;
-			54: note <= 0;
-
-			55: note <= 3;
-			56: note <= 0;
-
-			57: note <= 1;
-			58: note <= 1;
-			59: note <= 1;
-			60: note <= 1;
-			61: note <= 1;
-			62: note <= 0;
-
-			63: note <= 0;
-			64: note <= 0;
-			endcase
-
-			case(notenum)
-			1: length <= 2;
-			2: length <= 2;
-			3: length <= 2;
-			4: length <= 2;
-			5: length <= 2;
-			6: length <= 2;
-			7: length <= 1;
-			8: length <= 2;
-			9: length <= 2;
-			10: length <= 2;
-			11: length <= 2;
-			12: length <= 0;
-			13: length <= 2;
-			14: length <= 2;
-			15: length <= 2;
-			16: length <= 2;
-			17: length <= 2;
-			18: length <= 2;
-			19: length <= 2;
-			20: length <= 1;
-			21: length <= 2;
-			22: length <= 2;
-			23: length <= 2;
-			24: length <= 2;
-			25: length <= 0;
-			26: length <= 2;
-			endcase
-		end
-	end
-	
+                default: length <= 0; // Rest
+            endcase
+        end
+    end
 endmodule
