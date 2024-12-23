@@ -28,6 +28,10 @@ module mole_game(clk, keypad, RESET, mole, SEG_COM, SEG_DATA,pz, LCD_E,LCD_RS,LC
 	reg check;
 	reg [7:0] keypad_temp;
 	reg score_trigger = 0;
+	reg fever_time = 0;
+	reg ordinary_time = 1;
+	reg fever_chance = 0;
+	reg fever_pattern = 0;
 	output LCD_E;
 	output LCD_RS;
 	output LCD_RW;
@@ -91,7 +95,23 @@ SevenSeg S1(clk, score[7:0], RESET, SEG_COM, SEG_DATA);
 always @(posedge hoho)
 begin
 begin
-    mole <= mole + q;
+	if(ordinary_time == 1) 
+	begin
+		mole <= mole + q;
+	end
+	else begin
+		if(fever_pattern == 0)
+		begin
+			mole <= 8'b11110000;
+			fever_pattern = 1;
+		end
+		else
+		begin 
+			mole <= 8'b00001111;
+			fever_pattern = 0;
+		end
+	end
+    
 end
 
 if(RESET)
@@ -117,7 +137,7 @@ end
 	
 else
 begin
-	
+if(ordinary_time == 1) begin
 if((mole[0] & keypad_temp[0]) == 1'b1) begin
     score[7:0] <= score[7:0]+1'b1;
 	combo <= combo + 1; end
@@ -143,8 +163,26 @@ if((mole[0] & keypad_temp[0]) == 1'b1) begin
     score[7:0] <= score[7:0]+1'b1; 
 	combo <= combo + 1;end
     else begin end
-    
-score_trigger = 1;
+	if(combo >= 5)
+	begin 
+		combo = 0;
+		ordinary_time = 0;
+		fever_time = 1;
+	end
+end
+if(fever_time == 1)
+begin 
+	score[7:0] <= score[7:0]+2'b11;
+	fever_chance <= fever_chance + 1;
+	if(fever_chance == 3)
+	{
+		fever_chance = 0;
+		ordinary_time = 1;
+		fever_time = 0;
+	}
+end
+	
+
 timer <= timer - 1;
 end
 	
