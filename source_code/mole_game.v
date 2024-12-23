@@ -165,7 +165,7 @@ if((mole[0] & keypad_temp[0]) == 1'b1) begin
     else begin end
 	if(combo >= 5)
 	begin 
-		combo = 0;
+		combo = 4'b1010;
 		ordinary_time = 0;
 		fever_time = 1;
 	end
@@ -174,12 +174,13 @@ if(fever_time == 1)
 begin 
 	score[7:0] <= score[7:0]+2'b11;
 	fever_chance <= fever_chance + 1;
-	if(fever_chance == 3)
-	{
+	if(fever_chance >= 3)
+	begin
+		combo = 0;
 		fever_chance = 0;
 		ordinary_time = 1;
 		fever_time = 0;
-	}
+	end
 end
 	
 
