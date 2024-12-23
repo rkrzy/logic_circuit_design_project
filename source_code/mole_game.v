@@ -32,7 +32,8 @@ module mole_game(clk, keypad, RESET, mole, SEG_COM, SEG_DATA,pz, LCD_E,LCD_RS,LC
 	reg ordinary_time = 1;
 	reg [2:0] fever_chance;
 	reg fever_pattern = 0;
-
+    reg finish = 0;
+    
 	output LCD_E;
 	output LCD_RS;
 	output LCD_RW;
@@ -51,7 +52,7 @@ module mole_game(clk, keypad, RESET, mole, SEG_COM, SEG_DATA,pz, LCD_E,LCD_RS,LC
 	
 	SevenSegmentDecoder(combo, SEG7_COMBO);
 	
-	notes notegen(RESET, clr, clk, notenum, len, run);
+	notes notegen(RESET, clr, clk, notenum, len, run, finish);
 	
 	note playnote(notenum, clk, pz);
 	
@@ -133,6 +134,7 @@ else if(timer == 0 && check == 1)
 begin
 	mole <= 8'b11111111;
 	check <= 0;
+	finish <= 1;
 end
 	
 else
