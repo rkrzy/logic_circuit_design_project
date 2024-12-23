@@ -30,7 +30,7 @@ module mole_game(clk, keypad, RESET, mole, SEG_COM, SEG_DATA,pz, LCD_E,LCD_RS,LC
 	reg score_trigger = 0;
 	reg fever_time = 0;
 	reg ordinary_time = 1;
-	reg fever_chance = 0;
+	reg [2:0] fever_chance;
 	reg fever_pattern = 0;
 
 	output LCD_E;
@@ -47,10 +47,9 @@ module mole_game(clk, keypad, RESET, mole, SEG_COM, SEG_DATA,pz, LCD_E,LCD_RS,LC
 	counter_for_TEXT TAXI(clr, clk, TEXT_DRIVER);
 	counter_for_PIC PICKME(clr, clk, PIC_DRIVER);
 	
-	HB_CLCD MAN(RESET,TEXT_DRIVER,score,LCD_E,LCD_RS,LCD_RW,LCD_DATA);
+	HB_CLCD MAN(RESET,TEXT_DRIVER,score,combo,LCD_E,LCD_RS,LCD_RW,LCD_DATA);
 	
 	SevenSegmentDecoder(combo, SEG7_COMBO);
-	
 	
 	notes notegen(RESET, clr, clk, notenum, len, run);
 	
@@ -163,7 +162,7 @@ if((mole[0] & keypad_temp[0]) == 1'b1) begin
     else if((mole[7] & keypad_temp[7]) == 1'b1) begin
     score[7:0] = score[7:0]+1'b1; 
 	combo = combo + 1;end
-    else begin end
+    else begin combo = 0; end
 	if(combo >= 10)
 	begin 
 		ordinary_time = 0;
@@ -173,7 +172,6 @@ end
 if(fever_time == 1)
 begin 
 	fever_chance = fever_chance + 1;
-	combo = fever_chance;
 	if((mole[0] & keypad_temp[0]) == 1'b1) begin
     score[7:0] = score[7:0]+2'b11;
 	end
@@ -199,9 +197,9 @@ begin
     score[7:0] = score[7:0]+2'b11;
 	end
     else begin end
-	if(fever_chance >= 3)
+	if(fever_chance == 5)
 	begin
-		combo = 4'b0000;
+		combo = 0;
 		fever_chance = 0;
 		ordinary_time = 1;
 		fever_time = 0;
