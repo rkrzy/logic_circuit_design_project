@@ -1,4 +1,4 @@
-module pupu(clk, keypad, RESET, mole, SEG_COM, SEG_DATA,pz, LCD_E,LCD_RS,LCD_RW, LCD_DATA,R,G,B);
+module mole_game(clk, keypad, RESET, mole, SEG_COM, SEG_DATA,pz, LCD_E,LCD_RS,LCD_RW, LCD_DATA,R,G,B, SEG7_COMBO);
 	input  clk;
 	input RESET;
 	input [7:0]keypad;
@@ -23,7 +23,7 @@ module pupu(clk, keypad, RESET, mole, SEG_COM, SEG_DATA,pz, LCD_E,LCD_RS,LCD_RW,
 	reg [7:0]mole;
 	reg [7:0] timer = 45;
 	reg [7:0] score = 0;
-	reg [3:0] Combo = 0;
+	reg [3:0] combo = 0;
 	reg [3:0]i=0;
 	reg check;
 	reg [7:0] keypad_temp;
@@ -44,10 +44,7 @@ module pupu(clk, keypad, RESET, mole, SEG_COM, SEG_DATA,pz, LCD_E,LCD_RS,LCD_RW,
 	
 	HB_CLCD MAN(RESET,TEXT_DRIVER,score,LCD_E,LCD_RS,LCD_RW,LCD_DATA);
 	
-	HB_FULL_LED(RESETN,PIC_DRIVER,R,G,B);
-	
-	
-	SevenSeg_One combo(combo, SEG7_COMBO);
+	SevenSegmentDecoder(combo, SEG7_COMBO);
 	
 	
 	notes notegen(RESET, clr, clk, notenum, len, run);
@@ -93,14 +90,6 @@ SevenSeg S1(clk, score[7:0], RESET, SEG_COM, SEG_DATA);
 
 always @(posedge hoho)
 begin
-
-if(score_trigger == 1)
-begin
-	score_trigger = 0;
-end
-else begin
-	score_t
-end
 begin
     mole <= mole + q;
 end
@@ -131,28 +120,28 @@ begin
 	
 if((mole[0] & keypad_temp[0]) == 1'b1) begin
     score[7:0] <= score[7:0]+1'b1;
-	combo = combo + 1; end
+	combo <= combo + 1; end
     else if((mole[1] & keypad_temp[1]) == 1'b1) begin
     score[7:0] <= score[7:0]+1'b1;
-	combo = combo + 1; end
+	combo <= combo + 1; end
     else if((mole[2] & keypad_temp[2]) == 1'b1) begin
     score[7:0] <= score[7:0]+1'b1;
-	combo = combo + 1; end
+	combo <= combo + 1; end
     else if((mole[3] & keypad_temp[3]) == 1'b1) begin
     score[7:0] <= score[7:0]+1'b1;
-	combo = combo + 1; end
+	combo <= combo + 1; end
     else if((mole[4] & keypad_temp[4]) == 1'b1) begin
     score[7:0] <= score[7:0]+1'b1; 
-	combo = combo + 1;end
+	combo <= combo + 1;end
     else if((mole[5] & keypad_temp[5]) == 1'b1) begin
     score[7:0] <= score[7:0]+1'b1;
-	combo = combo + 1; end
+	combo <= combo + 1; end
     else if((mole[6] & keypad_temp[6]) == 1'b1) begin
     score[7:0] <= score[7:0]+1'b1;
-	combo = combo + 1; end
+	combo <= combo + 1; end
     else if((mole[7] & keypad_temp[7]) == 1'b1) begin
     score[7:0] <= score[7:0]+1'b1; 
-	combo = combo + 1;end
+	combo <= combo + 1;end
     else begin end
     
 score_trigger = 1;
