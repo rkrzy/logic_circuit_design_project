@@ -84,7 +84,7 @@ SevenSeg S1(clk, score[7:0], RESET, SEG_COM, SEG_DATA);
 			end
 		if(q < 8'b11111111)
 			begin
-			q <= q + 5'b11111;
+			q <= q + 8'b00010101;
 			end
 		else
 				begin
