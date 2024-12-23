@@ -14,7 +14,7 @@ module SevenSegmentDecoder (
             4'b0111: segments = 7'b1110000; // 7
             4'b1000: segments = 7'b1111111; // 8
             4'b1001: segments = 7'b1111011; // 9
-            4'b1010: segments = 7'b1110001; // 10이 들어오면 F를 출력해서 FEVER TIME를 표시해준다.
+            4'b1010: segments = 7'b1000111; // 10이 들어오면 F를 출력해서 FEVER TIME를 표시해준다.
             default: segments = 7'b0000000; // OFF
         endcase
     end
