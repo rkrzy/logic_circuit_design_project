@@ -140,71 +140,71 @@ else
 begin
 if(ordinary_time == 1) begin
 if((mole[0] & keypad_temp[0]) == 1'b1) begin
-    score[7:0] <= score[7:0]+1'b1;
-	combo <= combo + 1; end
+    score[7:0] = score[7:0]+1'b1;
+	combo = combo + 1; end
     else if((mole[1] & keypad_temp[1]) == 1'b1) begin
-    score[7:0] <= score[7:0]+1'b1;
-	combo <= combo + 1; end
+    score[7:0] = score[7:0]+1'b1;
+	combo = combo + 1; end
     else if((mole[2] & keypad_temp[2]) == 1'b1) begin
-    score[7:0] <= score[7:0]+1'b1;
-	combo <= combo + 1; end
+    score[7:0] = score[7:0]+1'b1;
+	combo = combo + 1; end
     else if((mole[3] & keypad_temp[3]) == 1'b1) begin
-    score[7:0] <= score[7:0]+1'b1;
-	combo <= combo + 1; end
+    score[7:0] = score[7:0]+1'b1;
+	combo = combo + 1; end
     else if((mole[4] & keypad_temp[4]) == 1'b1) begin
-    score[7:0] <= score[7:0]+1'b1; 
-	combo <= combo + 1;end
+    score[7:0] = score[7:0]+1'b1; 
+	combo = combo + 1;end
     else if((mole[5] & keypad_temp[5]) == 1'b1) begin
-    score[7:0] <= score[7:0]+1'b1;
-	combo <= combo + 1; end
+    score[7:0] = score[7:0]+1'b1;
+	combo = combo + 1; end
     else if((mole[6] & keypad_temp[6]) == 1'b1) begin
-    score[7:0] <= score[7:0]+1'b1;
-	combo <= combo + 1; end
+    score[7:0] = score[7:0]+1'b1;
+	combo = combo + 1; end
     else if((mole[7] & keypad_temp[7]) == 1'b1) begin
-    score[7:0] <= score[7:0]+1'b1; 
-	combo <= combo + 1;end
+    score[7:0] = score[7:0]+1'b1; 
+	combo = combo + 1;end
     else begin end
 	if(combo >= 10)
 	begin 
-		ordinary_time <= 0;
-		fever_time <= 1;
+		ordinary_time = 0;
+		fever_time = 1;
 	end
 end
 if(fever_time == 1)
 begin 
-	
-	fever_chance <= fever_chance + 1;
+	fever_chance = fever_chance + 1;
+	combo = fever_chance;
 	if((mole[0] & keypad_temp[0]) == 1'b1) begin
-    score[7:0] <= score[7:0]+2'b11;
+    score[7:0] = score[7:0]+2'b11;
 	end
     else if((mole[1] & keypad_temp[1]) == 1'b1) begin
-    score[7:0] <= score[7:0]+2'b11;
+    score[7:0] = score[7:0]+2'b11;
 	end
     else if((mole[2] & keypad_temp[2]) == 1'b1) begin
-    score[7:0] <= score[7:0]+2'b11;
+    score[7:0] = score[7:0]+2'b11;
 	end
     else if((mole[3] & keypad_temp[3]) == 1'b1) begin
-    score[7:0] <= score[7:0]+2'b11;
+    score[7:0] = score[7:0]+2'b11;
 	end
     else if((mole[4] & keypad_temp[4]) == 1'b1) begin
-    score[7:0] <= score[7:0]+2'b11;
+    score[7:0] = score[7:0]+2'b11;
 	end
     else if((mole[5] & keypad_temp[5]) == 1'b1) begin
-    score[7:0] <= score[7:0]+2'b11;
+    score[7:0] = score[7:0]+2'b11;
 	end
     else if((mole[6] & keypad_temp[6]) == 1'b1) begin
-    score[7:0] <= score[7:0]+2'b11;
+    score[7:0] = score[7:0]+2'b11;
 	end
     else if((mole[7] & keypad_temp[7]) == 1'b1) begin
-    score[7:0] <= score[7:0]+2'b11;
+    score[7:0] = score[7:0]+2'b11;
 	end
     else begin end
 	if(fever_chance >= 3)
 	begin
-		combo <= 4'b0000;
-		fever_chance <= 0;
-		ordinary_time <= 1;
-		fever_time <= 0;
+		combo = 4'b0000;
+		fever_chance = 0;
+		ordinary_time = 1;
+		fever_time = 0;
 	end
 end
 	
