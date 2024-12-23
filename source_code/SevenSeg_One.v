@@ -1,6 +1,6 @@
 module SevenSegmentDecoder (
     input [3:0] value,        // 입력 값 (0~9)
-    output [6:0] segments // 7-segment 출력
+    output reg[6:0] segments // 7-segment 출력
 );
     always @(*) begin
         case (value)
